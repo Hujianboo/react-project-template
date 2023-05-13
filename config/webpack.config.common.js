@@ -1,13 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
   entry: "./src/index.tsx",
-  mode: "development",
-  devtool: false,
-  devServer: {
-    port: 3000,
-    open: true,
-  },
   module: {
     rules: [
       {
@@ -20,7 +15,7 @@ module.exports = {
           {
             loader: "url-loader",
             options: {
-              limit: 8192, // 小于8KB的图片会被转换成base64编码
+              limit: 500, // 小于8KB的图片会被转换成base64编码
             },
           },
         ],
@@ -49,8 +44,14 @@ module.exports = {
     },
   },
   output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    filename: "[name].[contenthash].js",
+    path: path.resolve(__dirname, "../dist"),
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      name: false,
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
